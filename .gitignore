@@ -1,0 +1,3 @@
+*.bat
+/main/.env
+/node_modules
