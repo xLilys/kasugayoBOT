@@ -52,7 +52,7 @@ const createServerFile = (guild)=>{
         var newData = {
             "name":guild.name,
             "id":guild.id,
-            "reaction":":middle_finger:"};
+            "reaction":"🖕"};
         var writeStr = JSON.stringify(newData);
         fex.writeFileSync(saveFilePath,writeStr);
     }
@@ -70,16 +70,18 @@ client.on("guildCreate",guild =>{
 client.on('messageReactionAdd',async (reaction,user) => {
     const msg = reaction.message;
     const serverFilePath = filenameCatter(msg.guild.id);
-    var reaction = null;
-    console.log(msg);
+    if(fex.existsSync(serverFilePath)){
+    }else{
+        createServerFile(msg.guild);
+    }
+    var ks_reaction = null;
     const lock = new AsyncLock();
     await lock.acquire('reaction_get', () => {
         fs.readFile(serverFilePath,'utf-8')
         .then((rawdata) =>{
             var data = JSON.parse(rawdata);
-            reaction = data["reaction"];
-            console.log(reaction);
-            if(reaction.emoji.name != reaction){
+            ks_reaction = data["reaction"];
+            if(reaction.emoji.name != ks_reaction){
                 return;
             }else{
                 console.log("p");
@@ -92,7 +94,10 @@ client.on('messageReactionAdd',async (reaction,user) => {
                 */
                 
             }
-        });
+        })
+        .catch((e)=>{
+            console.log(e);
+        })
     });
     
 });
