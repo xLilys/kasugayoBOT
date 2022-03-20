@@ -2,7 +2,7 @@ require('dotenv').config();
 
 serverIDsPath = 'data/serverIDs.json'
 
-import {promises as fs} from 'fs';
+const fs = require('fs').promises;
 
 const { Client, Intents } = require('discord.js');
 const client = new Client({ intents: Object.keys(Intents.FLAGS) });
