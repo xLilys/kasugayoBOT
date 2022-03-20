@@ -3,7 +3,6 @@ require('dotenv').config();
 serverIDsPath = 'data/serverIDs.json'
 
 const fs = require('fs').promises;
-const fex = require('fs');
 
 const AsyncLock = require('async-lock/lib');
 const { Client, Intents } = require('discord.js');
@@ -46,8 +45,9 @@ const filenameCatter = (id) =>{
 };
 
 
-const createServerFile = (guild)=>{
+const createServerFile = async (guild)=>{
     var saveFilePath = filenameCatter(guild.id);
+    const fex = require('fs');
     if(fex.existsSync(saveFilePath)){
     }else{
         var newData = {
@@ -57,7 +57,10 @@ const createServerFile = (guild)=>{
             "messages":[]
         };
         var writeStr = JSON.stringify(newData);
-        fex.writeFileSync(saveFilePath,writeStr);
+        const lock = new AsyncLock();
+        await lock.acquire('create_serverfile',()=>{
+            fs.writeFile(saveFilePath,writeStr);
+        });
     }
 }
 
@@ -71,13 +74,21 @@ client.on("guildCreate",guild =>{
 
 
 client.on('messageReactionAdd',async (reaction,user) => {
-    if(reaction.createdTimestamp - reaction.message.createdTimestamp > 2 * 60 * 60 * 1000)return;
+    //2時間以上前のメッセージへのリアクションはカウントしない
+    if((new Date().getTime()) - reaction.message.createdTimestamp > 2 * 60 * 60 * 1000)return;
+    //console.log(reaction);
+
     const msg = reaction.message;
+
+    //自分で自分のカウントはできない
+    if(user.tag == msg.author.tag)return;
+
+    //BOTによるリアクションと、BOTのメッセージに対してカウントしない
+    if(user.bot)return;
+    if(msg.author.bot)return;
+
     const serverFilePath = filenameCatter(msg.guild.id);
-    if(fex.existsSync(serverFilePath)){
-    }else{
-        createServerFile(msg.guild);
-    }
+    createServerFile(msg.guild);
     var ks_reaction = null;
     const lock = new AsyncLock();
     await lock.acquire('reaction_get', () => {
@@ -88,20 +99,41 @@ client.on('messageReactionAdd',async (reaction,user) => {
             if(reaction.emoji.name != ks_reaction){
                 return;
             }else{
-                //console.log(user.tag);
-                /*
-                if(data["messages"].includes(msg.id)){
-                }else{
-                    data["messages"][msg.id] = {"id":msg.id,"pushed_users":[],"ks":0};
+                var alreadyCreated = false;
+                var index = 0;
+                for(const [i,elem] of data["messages"].entries()){
+                    if(elem["id"] == msg.id){
+                        alreadyCreated = true;
+                    }
                 }
-                if(data["messages"][msg.id]["pushed_users"].includes(user.tag)){
+
+                if(alreadyCreated){
+                    //nanimo=sinai
+                }else{
+                    data["messages"].push({"id":msg.id,"author":msg.author.tag,"timestamp":new Date().getTime(),"pushed_users":[],"ks":0});
+                }
+
+                var alreadySent = false;
+                index = 0;
+                for(const [i,elem] of data["messages"].entries()){
+                    if(elem["id"] == msg.id){
+                        index = i;
+                        if(data["messages"][index]["pushed_users"].includes(user.tag)){
+                            alreadySent = true;
+                            break;
+                        };
+                    }
+                }
+                if(alreadySent){
                     //no count
                 }else{
-                    data["messages"][msg.id]["ks"] += 1;
-                    data["messages"][msg.id]["pushed_users"].push(user.tag);
+                    //console.log("ks!");
+                    data["messages"][index]["ks"] += 1;
+                    data["messages"][index]["pushed_users"].push(user.tag);
                 }
-                */
-                
+
+                var outputstr = JSON.stringify(data);
+                return fs.writeFile(serverFilePath,outputstr);
                 
             }
         })
