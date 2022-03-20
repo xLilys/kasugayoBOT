@@ -12,7 +12,8 @@ const client = new Client({ intents: Object.keys(Intents.FLAGS) });
 const token = process.env.TOKEN;
 client.login(token);
 
-const writeServerID = async function(id){
+const writeServerID = async function(guild){
+    const id = guild.id;
     const lock = new AsyncLock();
     await lock.acquire('id_rw', () => {
         fs.readFile(serverIDsPath,'utf-8')
@@ -33,6 +34,7 @@ const writeServerID = async function(id){
     });
 }
 
+
 client.on('ready',()=>{
     console.log(`${client.user.tag}`);
 });
@@ -42,10 +44,7 @@ const filenameCatter = (id) =>{
 };
 
 
-client.on("guildCreate",guild =>{
-    console.log("registered at \n" + guild.name + '\n' +guild.id);
-    //初参加時はサーバーID書き込み
-    writeServerID(guild.id);
+const createServerFile = (guild)=>{
     var saveFilePath = filenameCatter(guild.id);
     if(fex.existsSync(saveFilePath)){
     }else{
@@ -57,14 +56,45 @@ client.on("guildCreate",guild =>{
         var writeStr = JSON.stringify(newData);
         fex.writeFileSync(saveFilePath,writeStr);
     }
+}
+
+client.on("guildCreate",guild =>{
+    console.log("registered at \n" + guild.name + '\n' +guild.id);
+    //初参加時はサーバーID書き込み
+    writeServerID(guild);
+    createServerFile(guild);
     console.log("Server file has generated.");
 });
 
 
 client.on('messageReactionAdd',async (reaction,user) => {
     const msg = reaction.message;
-    console.log(reaction.emoji.name);
-    //const serverFilePath = filenameCatter(message.guild.id);
+    const serverFilePath = filenameCatter(msg.guild.id);
+    var reaction = null;
+    console.log(msg);
+    const lock = new AsyncLock();
+    await lock.acquire('reaction_get', () => {
+        fs.readFile(serverFilePath,'utf-8')
+        .then((rawdata) =>{
+            var data = JSON.parse(rawdata);
+            reaction = data["reaction"];
+            console.log(reaction);
+            if(reaction.emoji.name != reaction){
+                return;
+            }else{
+                console.log("p");
+                /*
+                if(data["messages"] in msg.id){
+                    if(data["messages"][msg.id]["pushed_users"] in user.tag){
+                        
+                    }
+                }
+                */
+                
+            }
+        });
+    });
+    
 });
 
 

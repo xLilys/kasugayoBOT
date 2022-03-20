@@ -1,0 +1,89 @@
+[33mcommit 62b6b7393d5c8875dd9aede38e3d92444b91878a[m[33m ([m[1;36mHEAD -> [m[1;32mks_count[m[33m)[m
+Author: yuuki <yuuki617phone@gmail.com>
+Date:   Sun Mar 20 21:21:33 2022 +0900
+
+    指定のリアクションをされたら反応
+
+[33mcommit 1d0fd728ba5862a26d8df4a7e6739549823218f6[m
+Author: yuuki <yuuki617phone@gmail.com>
+Date:   Sun Mar 20 19:50:42 2022 +0900
+
+    リアクションへの反応のテスト
+
+[33mcommit 4dd9a06c08c1510d27a2e6f244765024afc182ad[m
+Author: yuuki <yuuki617phone@gmail.com>
+Date:   Sun Mar 20 19:42:39 2022 +0900
+
+    パスとIDと.jsonをくっつける関数
+
+[33mcommit 21ece790b943309745da7b1bb0d30c81eaaa20ef[m
+Author: yuuki <yuuki617phone@gmail.com>
+Date:   Sun Mar 20 18:42:08 2022 +0900
+
+    一部デバッグメッセージ削除
+
+[33mcommit cab4198fe4d954e5801dd47f82c07db3cb2c814a[m
+Author: yuuki <yuuki617phone@gmail.com>
+Date:   Sun Mar 20 18:15:32 2022 +0900
+
+    各サーバー用集計ファイルを生成(未生成時) fsをクソみたいな使い方してる
+
+[33mcommit 4d5138f7ca7f1e76e71f3a796536b43c62ba0800[m
+Author: yuuki <yuuki617phone@gmail.com>
+Date:   Sun Mar 20 16:15:56 2022 +0900
+
+    サーバーID書き込みをasync-lockで排他の非同期処理に変更
+
+[33mcommit 7c9c5f2f3781448072f6a07758b352e7146db9ed[m
+Author: yuuki <yuuki617phone@gmail.com>
+Date:   Sun Mar 20 12:22:33 2022 +0900
+
+    すてーじわすれてた
+
+[33mcommit 46dea1f6b5569627bf061fb375239b8434583714[m
+Author: yuuki <yuuki617phone@gmail.com>
+Date:   Sun Mar 20 12:22:20 2022 +0900
+
+    間違えて辞書型でIDを検索していたので修正　新規サーバーID書き込み関数完成
+
+[33mcommit 39503d2f22406d5e82c4b439f866817379bebc4c[m
+Author: yuuki <yuuki617phone@gmail.com>
+Date:   Sun Mar 20 12:00:22 2022 +0900
+
+    fs.promisesの記法に修正
+
+[33mcommit 847af22b54f3f235ce0df2075439b156721360d2[m
+Author: yuuki <yuuki617phone@gmail.com>
+Date:   Sun Mar 20 11:56:14 2022 +0900
+
+    サーバー加入時にjsonファイルにid書き込み
+
+[33mcommit 06cb6d19429a07e772be2cec6036d6c94f93ebcb[m
+Author: yuuki <yuuki617phone@gmail.com>
+Date:   Sun Mar 20 11:54:46 2022 +0900
+
+    じゅんばんいれかえた
+
+[33mcommit f23403d8411beae22d415cd01dfee35fd88b35c3[m
+Author: yuuki <yuuki617phone@gmail.com>
+Date:   Sun Mar 20 11:54:00 2022 +0900
+
+    add ID writer function
+
+[33mcommit 8babcf29bcb736719197578142d9fc15669638cc[m
+Author: yuuki <yuuki617phone@gmail.com>
+Date:   Sun Mar 20 10:58:46 2022 +0900
+
+    サーバー参加をログに通知
+
+[33mcommit 4238a074ccd43165dab4928a59de5cc75ed32927[m
+Author: yuuki <yuuki617phone@gmail.com>
+Date:   Sun Mar 20 10:25:57 2022 +0900
+
+    add serverIDs.json
+
+[33mcommit 1448e478f109562fd27f14d4c374b4f817b2d791[m[33m ([m[1;32mmaster[m[33m)[m
+Author: yuuki <yuuki617phone@gmail.com>
+Date:   Sun Mar 20 01:30:17 2022 +0900
+
+    test bot
