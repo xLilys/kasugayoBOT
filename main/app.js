@@ -32,9 +32,9 @@ client.on('ready',()=>{
     console.log(`${client.user.tag}`);
 });
 
-
 client.on("guildCreate",guild =>{
     console.log("registered at \n" + guild.name + '\n' +guild.id);
+    writeServerID(guild.id);
 });
 
 
