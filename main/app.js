@@ -4,29 +4,33 @@ serverIDsPath = 'data/serverIDs.json'
 
 const fs = require('fs').promises;
 
+const AsyncLock = require('async-lock/lib');
 const { Client, Intents } = require('discord.js');
 const client = new Client({ intents: Object.keys(Intents.FLAGS) });
 
 const token = process.env.TOKEN;
 client.login(token);
 
-const writeServerID = function(id){
-    fs.readFile(serverIDsPath,'utf-8')
-       .then((rawdata) =>{
-        var data = JSON.parse(rawdata,'utf8');
-        console.log(data["ServerIDs"]);
-        if (data["ServerIDs"].includes(id)){
-            console.log(':already exist.');
-        }else{
-            console.log(':new serverID');
-            data["ServerIDs"].push(id);
-            exportData = JSON.stringify(data);
-            return fs.writeFile(serverIDsPath,exportData);
-        }
-    })
-    .catch((e) =>{
-        console.log(e);
-    })
+const writeServerID = async function(id){
+    const lock = new AsyncLock();
+    await lock.acquire('id_rw', () => {
+        fs.readFile(serverIDsPath,'utf-8')
+        .then((rawdata) =>{
+            var data = JSON.parse(rawdata,'utf8');
+            console.log(data["ServerIDs"]);
+            if (data["ServerIDs"].includes(id)){
+                console.log(':already exist.');
+            }else{
+                console.log(':new serverID');
+                data["ServerIDs"].push(id);
+                exportData = JSON.stringify(data);
+                return fs.writeFile(serverIDsPath,exportData);
+            }
+        })
+        .catch((e) =>{
+            console.log(e);
+        })
+    });
 }
 
 client.on('ready',()=>{
