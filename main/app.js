@@ -10,10 +10,6 @@ const client = new Client({ intents: Object.keys(Intents.FLAGS) });
 const token = process.env.TOKEN;
 client.login(token);
 
-client.on('ready',()=>{
-    console.log(`${client.user.tag}`);
-});
-
 const writeServerID = function(id){
     fs.readFile(serverIDsPath,'utf-8')
        .then((rawdata) =>{
@@ -31,6 +27,10 @@ const writeServerID = function(id){
         console.log(e);
     })
 }
+
+client.on('ready',()=>{
+    console.log(`${client.user.tag}`);
+});
 
 
 client.on("guildCreate",guild =>{
