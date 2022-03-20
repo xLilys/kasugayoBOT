@@ -18,7 +18,6 @@ const writeServerID = async function(id){
         fs.readFile(serverIDsPath,'utf-8')
         .then((rawdata) =>{
             var data = JSON.parse(rawdata,'utf8');
-            console.log(data["ServerIDs"]);
             if (data["ServerIDs"].includes(id)){
                 console.log(':already exist.');
             }else{
