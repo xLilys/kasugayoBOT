@@ -61,6 +61,13 @@ client.on("guildCreate",guild =>{
 });
 
 
+client.on('messageReactionAdd',async (reaction,user) => {
+    const msg = reaction.message;
+    console.log(reaction.emoji.name);
+    //const serverFilePath = filenameCatter(message.guild.id);
+});
+
+
 //テスト用
 client.on('messageCreate',message =>{
     if(message.author.bot)return;
