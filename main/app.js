@@ -9,7 +9,9 @@ const AsyncLock = require('async-lock/lib');
 const { Client, Intents } = require('discord.js');
 const client = new Client({ intents: Object.keys(Intents.FLAGS) });
 
+
 const token = process.env.TOKEN;
+
 client.login(token);
 
 const writeServerID = async function(guild){
@@ -48,11 +50,12 @@ const createServerFile = (guild)=>{
     var saveFilePath = filenameCatter(guild.id);
     if(fex.existsSync(saveFilePath)){
     }else{
-        //default settings
         var newData = {
             "name":guild.name,
             "id":guild.id,
-            "reaction":"🖕"};
+            "reaction":"🖕",
+            "messages":[]
+        };
         var writeStr = JSON.stringify(newData);
         fex.writeFileSync(saveFilePath,writeStr);
     }
@@ -68,6 +71,7 @@ client.on("guildCreate",guild =>{
 
 
 client.on('messageReactionAdd',async (reaction,user) => {
+    if(reaction.createdTimestamp - reaction.message.createdTimestamp > 2 * 60 * 60 * 1000)return;
     const msg = reaction.message;
     const serverFilePath = filenameCatter(msg.guild.id);
     if(fex.existsSync(serverFilePath)){
@@ -84,14 +88,20 @@ client.on('messageReactionAdd',async (reaction,user) => {
             if(reaction.emoji.name != ks_reaction){
                 return;
             }else{
-                console.log("p");
+                //console.log(user.tag);
                 /*
-                if(data["messages"] in msg.id){
-                    if(data["messages"][msg.id]["pushed_users"] in user.tag){
-                        
-                    }
+                if(data["messages"].includes(msg.id)){
+                }else{
+                    data["messages"][msg.id] = {"id":msg.id,"pushed_users":[],"ks":0};
+                }
+                if(data["messages"][msg.id]["pushed_users"].includes(user.tag)){
+                    //no count
+                }else{
+                    data["messages"][msg.id]["ks"] += 1;
+                    data["messages"][msg.id]["pushed_users"].push(user.tag);
                 }
                 */
+                
                 
             }
         })
