@@ -15,7 +15,7 @@ const writeServerID = function(id){
        .then((rawdata) =>{
         var data = JSON.parse(rawdata,'utf8');
         console.log(data["ServerIDs"]);
-        if (id in data["ServerIDs"]){
+        if (data["ServerIDs"].includes(id)){
             console.log(':already exist.');
         }else{
             console.log(':new serverID');
