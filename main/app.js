@@ -14,10 +14,11 @@ const writeServerID = function(id){
     fs.readFile(serverIDsPath,'utf-8')
        .then((rawdata) =>{
         var data = JSON.parse(rawdata,'utf8');
-        if (id in data){
-            console.log(id + ':already exist.');
+        console.log(data["ServerIDs"]);
+        if (id in data["ServerIDs"]){
+            console.log(':already exist.');
         }else{
-            console.log(id + ':new serverID');
+            console.log(':new serverID');
             data["ServerIDs"].push(id);
             exportData = JSON.stringify(data);
             return fs.writeFile(serverIDsPath,exportData);

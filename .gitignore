@@ -2,3 +2,4 @@
 /main/.env
 /node_modules
 invitation.txt
+/main/data/serverIDs.json
