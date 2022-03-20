@@ -37,11 +37,16 @@ client.on('ready',()=>{
     console.log(`${client.user.tag}`);
 });
 
+const filenameCatter = (id) =>{
+    return 'data/ks_counts/'+id+'.json';
+};
+
+
 client.on("guildCreate",guild =>{
     console.log("registered at \n" + guild.name + '\n' +guild.id);
     //初参加時はサーバーID書き込み
     writeServerID(guild.id);
-    var saveFilePath='data/ks_counts/'+guild.id+'.json'
+    var saveFilePath = filenameCatter(guild.id);
     if(fex.existsSync(saveFilePath)){
     }else{
         //default settings
