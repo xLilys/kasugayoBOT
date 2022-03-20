@@ -3,6 +3,7 @@ require('dotenv').config();
 serverIDsPath = 'data/serverIDs.json'
 
 const fs = require('fs').promises;
+const fex = require('fs');
 
 const AsyncLock = require('async-lock/lib');
 const { Client, Intents } = require('discord.js');
@@ -39,7 +40,20 @@ client.on('ready',()=>{
 
 client.on("guildCreate",guild =>{
     console.log("registered at \n" + guild.name + '\n' +guild.id);
+    //初参加時はサーバーID書き込み
     writeServerID(guild.id);
+    var saveFilePath='data/ks_counts/'+guild.id+'.json'
+    if(fex.existsSync(saveFilePath)){
+    }else{
+        //default settings
+        var newData = {
+            "name":guild.name,
+            "id":guild.id,
+            "reaction":":middle_finger:"};
+        var writeStr = JSON.stringify(newData);
+        fex.writeFileSync(saveFilePath,writeStr);
+    }
+    console.log("Server file has generated.");
 });
 
 
