@@ -12,7 +12,7 @@ const twemojiRegex = require('twemoji-parser/dist/lib/regex').default;
 const { Client, Intents, CommandInteractionOptionResolver } = require('discord.js');
 const client = new Client({ intents: Object.keys(Intents.FLAGS) });
 
-const ks_timeout = 1 * 60 * 1000;//(ms)
+const ks_timeout = 60 * 60 * 1000;//(ms)
 
 const token = process.env.TOKEN;
 
