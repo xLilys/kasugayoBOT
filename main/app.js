@@ -82,7 +82,7 @@ client.on('messageReactionAdd',async (reaction,user) => {
     const msg = reaction.message;
 
     //自分で自分のカウントはできない
-    if(user.id == msg.author.id)return;
+    //if(user.id == msg.author.id)return;
 
     //BOTによるリアクションと、BOTのメッセージに対してカウントしない
     if(user.bot)return;
