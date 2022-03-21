@@ -12,11 +12,9 @@ const twemojiRegex = require('twemoji-parser/dist/lib/regex').default;
 const { Client, Intents, CommandInteractionOptionResolver } = require('discord.js');
 const client = new Client({ intents: Object.keys(Intents.FLAGS) });
 
-const ks_timeout = 30 * 1000;//(ms)
+const ks_timeout = 1 * 60 * 1000;//(ms)
 
 const token = process.env.TOKEN;
-
-
 
 client.login(token);
 
@@ -170,7 +168,7 @@ client.on('messageCreate',async (message) =>{
     var cmd = message.content.split(' ');
     if(cmd.length == 0)return;
 
-    if(cmd[0] == '!ksgayo'){
+    if(cmd[0] == '!ksgy'){
         if(cmd[1] == 'rchange'){
             if(cmd[2] == null)return;
             const lock = new AsyncLock();
@@ -180,13 +178,64 @@ client.on('messageCreate',async (message) =>{
                     var data = JSON.parse(rawdata);
                     data["reaction"] = cmd[2];
                     var outstr = JSON.stringify(data);
-                    client.channels.cache.get(message.channelId).send('カスリアクションが' + cmd[2] + 'に変更されました');
+                    message.channel.send('カスリアクションが' + cmd[2] + 'に変更されました');
                     return fs.writeFile(filenameCatter(message.guild.id),outstr);
                 })
                 .catch((e) => {
                     console.log(e);
                 })
             })
+        }else if(cmd[1] == 'ks'){
+            if(cmd[2] == null){
+                const lock = new AsyncLock();
+                await lock.acquire('users_rw',() => {
+                fs.readFile('data/users.json','utf-8')
+                .then((rawdata) => {
+                    const data = JSON.parse(rawdata);
+                    var ks = 0;
+                    //対象カスと対象カスがいるサーバーを探す
+                    var pos = 0;
+                    var foundks = false;
+                    for(const [index,elem] of data["users"].entries()){
+                        if(elem["id"] == message.author.id){
+                            pos=index;
+                            foundks=true;
+                            break;
+                        }
+                    }
+                    var s_pos = 0;
+                    var foundserver = false;
+                    for(const [index,elem] of data["users"][pos]["Servers"].entries()){
+                        if(elem["id"] == message.guild.id){
+                            s_pos = index;
+                            foundserver = true;
+                        }
+                    }
+                    var additional_message = '';
+                    if(!foundks || !foundserver){
+                        ks = 0;
+                        additional_message = '';
+                    }else{
+                        ks = data["users"][pos]["Servers"][s_pos]["ks"];
+                    }
+                    var h = Math.floor(ks / 100);
+                    if(h != 0){
+                        for(var i=0;i<h;i++){
+                            additional_message += '♰';
+                        }
+                        additional_message += '悔い改めて';
+                        for(var i=0;i<h;i++){
+                            additional_message += '♰';
+                        }
+                    }
+                    message.channel.send('お前のカスは今 '+ ks.toString() + '\n' + additional_message);
+                    return;
+                })
+                .catch((e) => {
+                        console.log(e);
+                    })
+                })
+            }
         }
     }
 });
