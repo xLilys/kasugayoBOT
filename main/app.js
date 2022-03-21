@@ -59,7 +59,7 @@ const createServerFile = async (guild)=>{
         var newData = {
             "name":guild.name,
             "id":guild.id,
-            "reaction":"🖕",
+            "reaction":'🖕',
             "messages":[]
         };
         var writeStr = JSON.stringify(newData);
@@ -154,14 +154,22 @@ client.on('messageReactionAdd',async (reaction,user) => {
 
 
 //テスト用
-/*
+
 client.on('messageCreate',message =>{
     if(message.author.bot)return;
-    if(message.content.includes('ks')){
-        message.channel.send('カス！');
+    //console.log(message.content);
+
+    /*
+    var cmd = message.content.split(' ');
+    if(cmd.length == 0)return;
+    if(cmd[0] == '!ksgayo'){
+        try
+    }else{
+        return;
     }
+    */
 });
-*/
+
 
 const sleep = waitTime => new Promise( resolve => setTimeout(resolve, waitTime));
 const ks_collector = async () =>{
