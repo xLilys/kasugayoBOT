@@ -8,7 +8,7 @@ const AsyncLock = require('async-lock/lib');
 const { Client, Intents } = require('discord.js');
 const { mainModule } = require('process');
 const client = new Client({ intents: Object.keys(Intents.FLAGS) });
-
+const ks_timeout = 2 * 60 * 60 * 1000;//(ms)
 
 const token = process.env.TOKEN;
 
@@ -76,7 +76,7 @@ client.on("guildCreate",guild =>{
 
 client.on('messageReactionAdd',async (reaction,user) => {
     //2時間以上前のメッセージへのリアクションはカウントしない
-    if((new Date().getTime()) - reaction.message.createdTimestamp > 2 * 60 * 60 * 1000)return;
+    if(((new Date().getTime()) - reaction.message.createdTimestamp) > ks_timeout)return;
     //console.log(reaction);
 
     const msg = reaction.message;
@@ -157,7 +157,9 @@ client.on('messageCreate',message =>{
 const sleep = waitTime => new Promise( resolve => setTimeout(resolve, waitTime));
 const ks_collector = async () =>{
     while(true){
-        await sleep(2 * 60 * 1000);
+        
+
+        await sleep(ks_timeout + 60000);
     }
 }
 
