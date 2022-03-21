@@ -240,7 +240,7 @@ client.on('messageCreate',async (message) =>{
                         additional_message += '♰';
                     }
                 }
-                message.channel.send('お前の'+ sora +'カスは今 '+ ks.toString() + '\n' + additional_message);
+                message.reply('お前の'+ sora +'カスは今 '+ ks.toString() + '\n' + additional_message);
                 return;
                 })
                 .catch((e) => {
