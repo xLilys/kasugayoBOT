@@ -225,7 +225,7 @@ client.on('messageCreate',async (message) =>{
                     ks = data["users"][pos]["ks"];
                     sora = '全ての'
                 }else{
-
+                    message.reply('不明なオプションです');
                     return;
                 }
 
@@ -247,6 +247,8 @@ client.on('messageCreate',async (message) =>{
                     console.log(e);
                 })
             })            
+        }else{
+            message.reply('不明なコマンドです');
         }
     }
 });
