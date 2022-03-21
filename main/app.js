@@ -157,17 +157,19 @@ client.on('messageReactionAdd',async (reaction,user) => {
 
 client.on('messageCreate',message =>{
     if(message.author.bot)return;
-    //console.log(message.content);
 
-    /*
+    
     var cmd = message.content.split(' ');
     if(cmd.length == 0)return;
     if(cmd[0] == '!ksgayo'){
-        try
-    }else{
-        return;
+        if(cmd[1] == 'rchange'){
+            //const lock = new AsyncLock();
+            console.log('aiueo');
+
+        }
     }
-    */
+    
+    
 });
 
 
