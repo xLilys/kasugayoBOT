@@ -98,7 +98,6 @@ client.on('messageReactionAdd',async (reaction,user) => {
         .then((rawdata) =>{
             var data = JSON.parse(rawdata);
             ks_reaction = data["reaction"];
-            console.log(reaction.emoji.name.toString());
             if(reaction.emoji.name != ks_reaction){
                 return;
             }else{
