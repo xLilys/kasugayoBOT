@@ -5,12 +5,17 @@ serverIDsPath = 'data/serverIDs.json'
 const fs = require('fs').promises;
 
 const AsyncLock = require('async-lock/lib');
-const { Client, Intents, CommandInteractionOptionResolver } = require('discord.js');
 const { mainModule } = require('process');
+const twemojiRegex = require('twemoji-parser/dist/lib/regex').default;
+
+const { Client, Intents, CommandInteractionOptionResolver } = require('discord.js');
 const client = new Client({ intents: Object.keys(Intents.FLAGS) });
+
 const ks_timeout = 30 * 1000;//(ms)
 
 const token = process.env.TOKEN;
+
+
 
 client.login(token);
 
@@ -98,6 +103,7 @@ client.on('messageReactionAdd',async (reaction,user) => {
         .then((rawdata) =>{
             var data = JSON.parse(rawdata);
             ks_reaction = data["reaction"];
+            console.log(reaction.emoji.name);
             if(reaction.emoji.name != ks_reaction){
                 return;
             }else{
