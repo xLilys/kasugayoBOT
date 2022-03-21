@@ -79,7 +79,6 @@ client.on("guildCreate",guild =>{
 
 
 client.on('messageReactionAdd',async (reaction,user) => {
-    //2時間以上前のメッセージへのリアクションはカウントしない
     if(((new Date().getTime()) - reaction.message.createdTimestamp) > ks_timeout)return;
     //console.log(reaction);
 
@@ -164,11 +163,10 @@ client.on('messageReactionAdd',async (reaction,user) => {
 client.on('messageCreate',async (message) =>{
     if(message.author.bot)return;
 
-
     var cmd = message.content.split(' ');
     if(cmd.length == 0)return;
 
-    if(cmd[0] == '!ksgy'){
+    if(cmd[0] == '!ks'){
         if(cmd[1] == 'rchange'){
             if(cmd[2] == null)return;
             const lock = new AsyncLock();
@@ -246,7 +244,34 @@ client.on('messageCreate',async (message) =>{
                 .catch((e) => {
                     console.log(e);
                 })
-            })            
+            })
+        }else if(cmd[1] == 'help'){
+            var h = {
+                "commands":{
+                    "help":{"description":'このメニューを表示'},
+                    "ks [option]":{"description":'カス数を表示',"options":[{"option":"-all","description":"全サーバーでの合計"}]},
+                    "rchange [emoji]":{"description":"カスをカウントするリアクションを[emoji]に変更する"}
+                }
+            }
+            var ds = '♰カスが代BOT♰  !ks helpメニューだカス\n\n';
+            for(const key in h["commands"]){
+                ds += key + ':' + h["commands"][key]["description"];
+                if("options" in h["commands"][key]){
+                    ds += '\noptions:'
+                    var f = true;
+                    for(const elem of h["commands"][key]["options"]){
+                        if(f){
+                            ds += elem["option"] + ':' + elem["description"] + '\n'
+                            f=false;
+                        }else{
+                            ds += '       ' + elem["option"] + ':' + elem["description"] + '\n'
+                        }
+                    }
+                    ds = ds.substring(0,ds.length - 1);
+                }
+                ds += '\n\n'
+            }
+            message.reply('```'+ ds +'```');
         }else{
             message.reply('不明なコマンドです');
         }
