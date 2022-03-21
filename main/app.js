@@ -165,8 +165,11 @@ client.on('messageReactionAdd',async (reaction,user) => {
 
 client.on('messageCreate',async (message) =>{
     if(message.author.bot)return;
+
+
     var cmd = message.content.split(' ');
     if(cmd.length == 0)return;
+
     if(cmd[0] == '!ksgayo'){
         if(cmd[1] == 'rchange'){
             if(cmd[2] == null)return;
@@ -177,6 +180,7 @@ client.on('messageCreate',async (message) =>{
                     var data = JSON.parse(rawdata);
                     data["reaction"] = cmd[2];
                     var outstr = JSON.stringify(data);
+                    client.channels.cache.get(message.channelId).send('カスリアクションが' + cmd[2] + 'に変更されました');
                     return fs.writeFile(filenameCatter(message.guild.id),outstr);
                 })
                 .catch((e) => {
