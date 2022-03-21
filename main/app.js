@@ -186,23 +186,26 @@ client.on('messageCreate',async (message) =>{
                 })
             })
         }else if(cmd[1] == 'ks'){
-            if(cmd[2] == null){
-                const lock = new AsyncLock();
-                await lock.acquire('users_rw',() => {
-                fs.readFile('data/users.json','utf-8')
-                .then((rawdata) => {
-                    const data = JSON.parse(rawdata);
-                    var ks = 0;
-                    //対象カスと対象カスがいるサーバーを探す
-                    var pos = 0;
-                    var foundks = false;
-                    for(const [index,elem] of data["users"].entries()){
-                        if(elem["id"] == message.author.id){
-                            pos=index;
-                            foundks=true;
-                            break;
-                        }
+            const lock = new AsyncLock();
+            await lock.acquire('users_rw',() => {
+            fs.readFile('data/users.json','utf-8')
+            .then((rawdata) => {
+                const data = JSON.parse(rawdata);
+                var ks = 0;
+                var target = message.author.id;
+                //対象カスと対象カスがいるサーバーを探す
+                var pos = 0;
+                var foundks = false;
+                for(const [index,elem] of data["users"].entries()){
+                    if(elem["id"] == target){
+                        pos=index;
+                        foundks=true;
+                        break;
                     }
+                }
+                
+                var sora = '';
+                if(cmd[2] == null){
                     var s_pos = 0;
                     var foundserver = false;
                     for(const [index,elem] of data["users"][pos]["Servers"].entries()){
@@ -211,31 +214,39 @@ client.on('messageCreate',async (message) =>{
                             foundserver = true;
                         }
                     }
-                    var additional_message = '';
                     if(!foundks || !foundserver){
                         ks = 0;
                         additional_message = '';
                     }else{
                         ks = data["users"][pos]["Servers"][s_pos]["ks"];
                     }
-                    var h = Math.floor(ks / 100);
-                    if(h != 0){
-                        for(var i=0;i<h;i++){
-                            additional_message += '♰';
-                        }
-                        additional_message += '悔い改めて';
-                        for(var i=0;i<h;i++){
-                            additional_message += '♰';
-                        }
-                    }
-                    message.channel.send('お前のカスは今 '+ ks.toString() + '\n' + additional_message);
+                    sora = 'このサーバーでの'
+                }else if(cmd[2] == '-all'){
+                    ks = data["users"][pos]["ks"];
+                    sora = '全ての'
+                }else{
+
                     return;
+                }
+
+                var additional_message = '';
+                var h = Math.floor(ks / 100);
+                if(h != 0){
+                    for(var i=0;i<h;i++){
+                        additional_message += '♰';
+                    }
+                    additional_message += '悔い改めて';
+                    for(var i=0;i<h;i++){
+                        additional_message += '♰';
+                    }
+                }
+                message.channel.send('お前の'+ sora +'カスは今 '+ ks.toString() + '\n' + additional_message);
+                return;
                 })
                 .catch((e) => {
-                        console.log(e);
-                    })
+                    console.log(e);
                 })
-            }
+            })            
         }
     }
 });
