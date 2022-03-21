@@ -154,8 +154,12 @@ client.on('messageCreate',message =>{
     }
 });
 
-const mainloop = async () =>{
-
+const sleep = waitTime => new Promise( resolve => setTimeout(resolve, waitTime));
+const ks_collector = async () =>{
+    while(true){
+        console.log("fkan");
+        await sleep(2 * 60 * 1000);
+    }
 }
 
-mainloop();
+ks_collector();
