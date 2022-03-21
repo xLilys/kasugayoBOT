@@ -82,7 +82,7 @@ client.on('messageReactionAdd',async (reaction,user) => {
     const msg = reaction.message;
 
     //自分で自分のカウントはできない
-    if(user.tag == msg.author.tag)return;
+    if(user.id == msg.author.id)return;
 
     //BOTによるリアクションと、BOTのメッセージに対してカウントしない
     if(user.bot)return;
@@ -111,7 +111,7 @@ client.on('messageReactionAdd',async (reaction,user) => {
                 if(alreadyCreated){
                     //nanimo=sinai
                 }else{
-                    data["messages"].push({"id":msg.id,"author":msg.author.tag,"timestamp":new Date().getTime(),"pushed_users":[],"ks":0});
+                    data["messages"].push({"id":msg.id,"author":{"id":msg.author.id,"name":msg.author.tag},"timestamp":new Date().getTime(),"pushed_users":[],"ks":0});
                 }
 
                 var alreadySent = false;
@@ -119,7 +119,7 @@ client.on('messageReactionAdd',async (reaction,user) => {
                 for(const [i,elem] of data["messages"].entries()){
                     if(elem["id"] == msg.id){
                         index = i;
-                        if(data["messages"][index]["pushed_users"].includes(user.tag)){
+                        if(data["messages"][index]["pushed_users"].includes(user.id)){
                             alreadySent = true;
                             break;
                         };
@@ -130,7 +130,7 @@ client.on('messageReactionAdd',async (reaction,user) => {
                 }else{
                     //console.log("ks!");
                     data["messages"][index]["ks"] += 1;
-                    data["messages"][index]["pushed_users"].push(user.tag);
+                    data["messages"][index]["pushed_users"].push(user.id);
                 }
 
                 var outputstr = JSON.stringify(data);
@@ -195,7 +195,7 @@ const ks_collector = async () =>{
                                 var ks_exist = false;
                                 var ks_pos = 0;
                                 for(const [i,elem] of users["users"].entries()){
-                                    if(elem["id"] == msg["author"]){
+                                    if(elem["id"] == msg["author"]["id"]){
                                         ks_exist = true;
                                         ks_pos = i;
                                         break;
@@ -206,9 +206,9 @@ const ks_collector = async () =>{
                                     users["users"][ks_pos]["ks"] += msg["ks"];
                                 }else{
                                     //新しいユーザーの登録
-                                    users["users"].push({"id":msg["author"],"ks":msg["ks"]});
+                                    users["users"].push({"id":msg["author"]["id"],"name":msg["author"]["name"],"ks":msg["ks"]});
                                 }
-                                
+
                             }
 
                             console.log(serverdata["messages"]);
