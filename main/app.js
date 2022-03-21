@@ -174,9 +174,20 @@ client.on('messageCreate',async (message) =>{
                 fs.readFile(filenameCatter(message.guild.id),'utf-8')
                 .then((rawdata) => {
                     var data = JSON.parse(rawdata);
-                    data["reaction"] = cmd[2];
+
+                    var em = cmd[2];
+                    var emoji_exist = false;
+                    if(em.match(twemojiRegex)){
+                        emoji_exist = true;
+                    }else if(client.emojis.cache.toJSON().find(e => ('<:'+ e.name + ':' +　e.id + '>') == em) != null){
+                        emoji_exist = true;
+                    }else{
+                        message.reply('絵文字が存在しません');
+                        return;
+                    }
+                    data["reaction"] = em;
                     var outstr = JSON.stringify(data);
-                    message.channel.send('カスリアクションが' + cmd[2] + 'に変更されました');
+                    message.channel.send('カスリアクションが' + em + 'に変更されました');
                     return fs.writeFile(filenameCatter(message.guild.id),outstr);
                 })
                 .catch((e) => {
