@@ -90,6 +90,7 @@ client.on('messageReactionAdd',async (reaction,user) => {
 
     const serverFilePath = filenameCatter(msg.guild.id);
     createServerFile(msg.guild);
+
     var ks_reaction = null;
     const lock = new AsyncLock();
     await lock.acquire('serverfile_rw', () => {
@@ -97,6 +98,7 @@ client.on('messageReactionAdd',async (reaction,user) => {
         .then((rawdata) =>{
             var data = JSON.parse(rawdata);
             ks_reaction = data["reaction"];
+            console.log(reaction.emoji.id);
             if(reaction.emoji.name != ks_reaction){
                 return;
             }else{
@@ -211,11 +213,9 @@ const ks_collector = async () =>{
 
                             }
 
-                            console.log(serverdata["messages"]);
                             serverdata["messages"] = serverdata["messages"].filter((msg) => {
                                 return (((new Date().getTime()) - serverdata["messages"].timestamp) > ks_timeout)
                             });
-                            console.log(serverdata["messages"]);
 
                             var serverdata_strout = JSON.stringify(serverdata);
                             var user_strout = JSON.stringify(users);
@@ -243,3 +243,4 @@ const ks_collector = async () =>{
 };
 
 ks_collector();
+
