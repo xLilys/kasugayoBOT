@@ -59,7 +59,7 @@ const createServerFile = async (guild)=>{
         };
         var writeStr = JSON.stringify(newData);
         const lock = new AsyncLock();
-        await lock.acquire('create_serverfile',()=>{
+        await lock.acquire('serverfile_rw',()=>{
             fs.writeFile(saveFilePath,writeStr);
         });
     }
@@ -92,7 +92,7 @@ client.on('messageReactionAdd',async (reaction,user) => {
     createServerFile(msg.guild);
     var ks_reaction = null;
     const lock = new AsyncLock();
-    await lock.acquire('reaction_get', () => {
+    await lock.acquire('serverfile_rw', () => {
         fs.readFile(serverFilePath,'utf-8')
         .then((rawdata) =>{
             var data = JSON.parse(rawdata);
@@ -157,9 +157,17 @@ client.on('messageCreate',message =>{
 const sleep = waitTime => new Promise( resolve => setTimeout(resolve, waitTime));
 const ks_collector = async () =>{
     while(true){
-        
-
-        await sleep(ks_timeout + 60000);
+        const lock = new AsyncLock();
+        await lock.acquire('id_rw',() =>{
+            fs.readFile('data/serverIDs.json','utf-8')
+            .then((rawdata) =>{
+                var data = JSON.parse(rawdata);
+                const ids = data["ServerIDs"];
+                
+                //各サーバーごとに集計
+            })
+        });
+        await sleep(ks_timeout);
     }
 }
 
