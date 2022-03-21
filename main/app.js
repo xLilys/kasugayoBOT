@@ -6,6 +6,7 @@ const fs = require('fs').promises;
 
 const AsyncLock = require('async-lock/lib');
 const { Client, Intents } = require('discord.js');
+const { mainModule } = require('process');
 const client = new Client({ intents: Object.keys(Intents.FLAGS) });
 
 
@@ -134,15 +135,15 @@ client.on('messageReactionAdd',async (reaction,user) => {
 
                 var outputstr = JSON.stringify(data);
                 return fs.writeFile(serverFilePath,outputstr);
-                
             }
         })
         .catch((e)=>{
             console.log(e);
         })
     });
-    
 });
+
+
 
 
 //テスト用
@@ -153,3 +154,8 @@ client.on('messageCreate',message =>{
     }
 });
 
+const mainloop = async () =>{
+
+}
+
+mainloop();
