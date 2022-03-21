@@ -98,7 +98,7 @@ client.on('messageReactionAdd',async (reaction,user) => {
         .then((rawdata) =>{
             var data = JSON.parse(rawdata);
             ks_reaction = data["reaction"];
-            console.log(reaction.emoji.id);
+            console.log(reaction.emoji.name.toString());
             if(reaction.emoji.name != ks_reaction){
                 return;
             }else{
@@ -149,12 +149,14 @@ client.on('messageReactionAdd',async (reaction,user) => {
 
 
 //テスト用
+/*
 client.on('messageCreate',message =>{
     if(message.author.bot)return;
     if(message.content.includes('ks')){
         message.channel.send('カス！');
     }
 });
+*/
 
 const sleep = waitTime => new Promise( resolve => setTimeout(resolve, waitTime));
 const ks_collector = async () =>{
