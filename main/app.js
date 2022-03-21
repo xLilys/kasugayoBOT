@@ -189,8 +189,6 @@ client.on('messageCreate',async (message) =>{
             })
         }
     }
-    
-    
 });
 
 
@@ -243,10 +241,33 @@ const ks_collector = async () =>{
                                 }
 
                                 if(ks_exist){
+                                    //全体カス
                                     users["users"][ks_pos]["ks"] += msg["ks"];
+
+                                    //サーバー別カス
+                                    var sk_ex = false;
+                                    var spos = 0;
+                                    users["users"][ks_pos]["Servers"].includes(serverdata["id"])
+                                    for(const [j,s] of users["users"][ks_pos]["Servers"].entries()){
+                                        if(s["id"] == serverdata["id"]){
+                                            sk_ex = true;
+                                            spos = j;
+                                            break;
+                                        }   
+                                    }
+
+                                    if(sk_ex){
+                                        //すでに存在カス
+                                        users["users"][ks_pos]["Servers"][spos]["ks"] += msg["ks"];
+                                    }else{
+                                        //新規サーバーカス
+                                        users["users"][ks_pos]["Servers"].push({"id":serverdata["id"],"ks":msg["ks"]});
+                                    }
+
                                 }else{
                                     //新しいユーザーの登録
-                                    users["users"].push({"id":msg["author"]["id"],"name":msg["author"]["name"],"ks":msg["ks"]});
+                                    users["users"].push({"id":msg["author"]["id"],"name":msg["author"]["name"],"ks":msg["ks"],"Servers":[{"id":serverdata["id"],"ks":msg["ks"]}]});
+                                    users["registered"] += 1;
                                 }
 
                             }
