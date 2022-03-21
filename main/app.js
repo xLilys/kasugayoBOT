@@ -8,6 +8,7 @@ const AsyncLock = require('async-lock/lib');
 const { mainModule } = require('process');
 const twemojiRegex = require('twemoji-parser/dist/lib/regex').default;
 
+
 const { Client, Intents, CommandInteractionOptionResolver } = require('discord.js');
 const client = new Client({ intents: Object.keys(Intents.FLAGS) });
 
@@ -103,8 +104,15 @@ client.on('messageReactionAdd',async (reaction,user) => {
         .then((rawdata) =>{
             var data = JSON.parse(rawdata);
             ks_reaction = data["reaction"];
-            console.log(reaction.emoji.name);
-            if(reaction.emoji.name != ks_reaction){
+            var em = null;
+
+            if(reaction.emoji.name.match(twemojiRegex)){
+                em = reaction.emoji.name;
+            }else{
+                em = '<:' + reaction.emoji.identifier + '>';
+            }
+
+            if(em != ks_reaction){
                 return;
             }else{
                 var alreadyCreated = false;
@@ -155,17 +163,26 @@ client.on('messageReactionAdd',async (reaction,user) => {
 
 //テスト用
 
-client.on('messageCreate',message =>{
+client.on('messageCreate',async (message) =>{
     if(message.author.bot)return;
-
-    
     var cmd = message.content.split(' ');
     if(cmd.length == 0)return;
     if(cmd[0] == '!ksgayo'){
         if(cmd[1] == 'rchange'){
-            //const lock = new AsyncLock();
-            console.log('aiueo');
-
+            if(cmd[2] == null)return;
+            const lock = new AsyncLock();
+            await lock.acquire('serverfile_rw',() => {
+                fs.readFile(filenameCatter(message.guild.id),'utf-8')
+                .then((rawdata) => {
+                    var data = JSON.parse(rawdata);
+                    data["reaction"] = cmd[2];
+                    var outstr = JSON.stringify(data);
+                    return fs.writeFile(filenameCatter(message.guild.id),outstr);
+                })
+                .catch((e) => {
+                    console.log(e);
+                })
+            })
         }
     }
     
@@ -184,7 +201,7 @@ const ks_collector = async () =>{
             .then((userdata_raw) => {
                 return JSON.parse(userdata_raw);
             })
-            .then((t) => {
+            .then((t) => {//kuso
                 users = t;
             })
         });
