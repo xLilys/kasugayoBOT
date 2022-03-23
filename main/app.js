@@ -43,6 +43,7 @@ const writeServerID = async function(guild){
 
 client.on('ready',()=>{
     console.log(`${client.user.tag}`);
+    ks_collector();
 });
 
 const filenameCatter = (id) =>{
@@ -395,9 +396,12 @@ const ks_collector = async () =>{
                 console.log(e);
             });
         });
+        const next_update = new Date().getTime() + ks_timeout;
+        client.user.setActivity({
+            name:`次回の更新は${Date(next_update).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' })}`
+        })
         await sleep(ks_timeout);
     }
 };
 
-ks_collector();
 
