@@ -359,6 +359,11 @@ const ks_collector = async () =>{
                 console.log(e);
             });
         });
+        const next_update = new Date().getTime() + ks_timeout;
+        client.user.setActivity({
+            name:`次回の更新は${next_update.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' })}`
+        })
+
         await sleep(ks_timeout);
     }
 };
