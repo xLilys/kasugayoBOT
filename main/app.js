@@ -243,11 +243,11 @@ client.on('messageCreate',async (message) =>{
                 var h = Math.floor(ks / 100);
                 if(h != 0){
                     for(var i=0;i<h;i++){
-                        additional_message += '♰';
+                        additional_message += '†';
                     }
                     additional_message += '悔い改めて';
                     for(var i=0;i<h;i++){
-                        additional_message += '♰';
+                        additional_message += '†';
                     }
                 }
                 message.reply('お前の'+ sora +'カスは今 '+ ks.toString() + '\n' + additional_message);
@@ -265,7 +265,7 @@ client.on('messageCreate',async (message) =>{
                     "rchange [emoji]":{"description":"カスをカウントするリアクションを[emoji]に変更する"}
                 }
             }
-            var ds = '♰カスが代BOT♰  !ks helpメニューだカス\n\n';
+            var ds = '†カスが代BOT†  !ks helpメニューだカス\n\n';
             for(const key in h["commands"]){
                 ds += key + ':' + h["commands"][key]["description"];
                 if("options" in h["commands"][key]){
