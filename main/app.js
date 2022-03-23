@@ -267,7 +267,7 @@ client.on('messageCreate',async (message) =>{
             }
             var ds = '†カスが代BOT†  !ks helpメニューだカス\n\n';
             for(const key in h["commands"]){
-                ds += key + ':' + h["commands"][key]["description"];
+                ds += '・' + key + ':' + h["commands"][key]["description"];
                 if("options" in h["commands"][key]){
                     ds += '\noptions:'
                     var f = true;
