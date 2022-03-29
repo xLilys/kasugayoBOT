@@ -163,6 +163,8 @@ client.on('messageReactionAdd', async(reaction, user) => {
 client.on('messageCreate', async(message) => {
     if (message.author.bot) return;
 
+    if (message.content == 'カス') message.channel.send("カスがよ");
+
     var cmd = message.content.split(' ');
     if (cmd.length == 0) return;
 
